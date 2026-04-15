@@ -121,9 +121,6 @@
                     <p class="reference" id="reference">Salmos 23:6</p>
                 </div>
                 <button class="btn-reset" onclick="event.stopPropagation(); resetear()">Otra promesa</button>
-                <div id="promise-content">
-    <p class="verse" id="verse">"..."</p>
-    <p class="reference" id="reference">...</p>
 </div>
 
 <button class="btn-whatsapp-share" onclick="compartirWhatsApp()" style="margin-top: 20px; background: #25D366; color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px; margin-left: auto; margin-right: auto;">
@@ -212,22 +209,7 @@
             const card = document.getElementById('card');
             card.style.transform = "rotateY(0deg)";
             card.classList.remove('flipped');
-            function compartirWhatsApp() {
-    // Evita que el clic en el botón active el giro de la tarjeta
-    event.stopPropagation();
-
-    const verso = document.getElementById('verse').innerText;
-    const referencia = document.getElementById('reference').innerText;
     
-    // El texto que se enviará
-    const mensaje = `📖 *Promesa del día para ti:* \n\n${verso}\n\n📍 ${referencia}\n\n✨ _Enviado desde el Promesario Digital_`;
-    
-    // Codifica el texto para que funcione en un link
-    const mensajeCodificado = encodeURIComponent(mensaje);
-    
-    // Abre WhatsApp
-    window.open(`https://wa.me/?text=${mensajeCodificado}`, '_blank');
-}
         }
     </script>
 </body>
