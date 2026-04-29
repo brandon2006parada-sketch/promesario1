@@ -10,6 +10,7 @@
             --gold: #d4af37;
             --deep-blue: #0f172a;
             --white: #ffffff;
+            --whatsapp-green: #25D366;
         }
 
         body {
@@ -41,10 +42,9 @@
         }
 
         .card.flipped {
-            transform: rotateY(180px);
+            transform: rotateY(180deg);
         }
 
-        /* Lados de la tarjeta */
         .card-face {
             position: absolute;
             width: 100%;
@@ -58,21 +58,13 @@
             border: 2px solid var(--gold);
             padding: 30px;
             text-align: center;
+            box-sizing: border-box;
         }
 
-        /* Frente (Cerrada) */
         .card-front {
             background: var(--deep-blue);
-            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
         }
 
-        .card-front i {
-            font-size: 4rem;
-            color: var(--gold);
-            margin-bottom: 20px;
-        }
-
-        /* Dorso (Promesa revelada) */
         .card-back {
             background: var(--white);
             color: var(--deep-blue);
@@ -94,15 +86,36 @@
             letter-spacing: 2px;
         }
 
-        .btn-reset {
+        .btn-container {
             margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        button {
             padding: 10px 20px;
-            background: var(--deep-blue);
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 0.8rem;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .btn-reset {
+            background: var(--deep-blue);
+            color: white;
+        }
+
+        .btn-share {
+            background: var(--whatsapp-green);
+            color: white;
+        }
+        
+        button:hover {
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -117,22 +130,16 @@
             </div>
             <div class="card-face card-back">
                 <div id="promise-content">
-                    <p class="verse" id="verse">"Ciertamente el bien y la misericordia me seguirán todos los días de mi vida."</p>
-                    <p class="reference" id="reference">Salmos 23:6</p>
+                    <p class="verse" id="verse"></p>
+                    <p class="reference" id="reference"></p>
                 </div>
-                <button class="btn-reset" onclick="event.stopPropagation(); resetear()">Otra promesa</button>
-</div>
-
-<button class="btn-whatsapp-share" onclick="compartirWhatsApp()" style="margin-top: 20px; background: #25D366; color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px; margin-left: auto; margin-right: auto;">
-    <span>Comparte en</span> <i class="fab fa-whatsapp"></i>
-</button>
-
-<button class="btn-reset" onclick="event.stopPropagation(); resetear()">Otra promesa</button>
+                <div class="btn-container">
+                    <button class="btn-share" onclick="event.stopPropagation(); compartirWhatsApp()">Compartir en WhatsApp 📱</button>
+                    <button class="btn-reset" onclick="event.stopPropagation(); resetear()">Otra promesa</button>
+                </div>
             </div>
         </div>
-        
     </div>
-    
 
     <script>
         const promesas = [
@@ -143,7 +150,7 @@
             { v: "Mas a Dios gracias, el cual nos da la victoria por medio de nuestro Señor Jesucristo.", r: "1 Corintios 15:57" },
             { v: "El Señor es mi luz y mi salvación; ¿de quién temeré? El Señor es la fortaleza de mi vida; ¿de quién he de atemorizarme?", r: "Salmos 27:1" },
             { v: "En el mundo tendréis aflicción; pero confiad, yo he vencido al mundo.", r: "Juan 16:33" },
-            { v: "Dios es nuestro amparo y fortaleza, nuestro pronto auxilio en las tribulaciones.", r: "Salmos 46:1" ,  r: "Filipenses 4:6-7"},
+            { v: "Dios es nuestro amparo y fortaleza, nuestro pronto auxilio en las tribulaciones.", r: "Salmos 46:1" },
             { v: "Y la paz de Dios, que sobrepasa todo entendimiento, guardará vuestros corazones y vuestros pensamientos en Cristo Jesús.", r: "Filipenses 4:7" },
             { v: "La paz os dejo, mi paz os doy; yo no os la doy como el mundo la da. No se turbe vuestro corazón, ni tenga miedo.", r: "Juan 14:27" },
             { v: "Deléitate asimismo en Jehová, y él te concederá las peticiones de tu corazón.", r: "Salmos 37:4" },
@@ -191,26 +198,31 @@
             { v: "Toda buena dádiva y todo don perfecto desciende de lo alto, del Padre de las luces.", r: "Santiago 1:17" },
         ]
 
-          // Copia esto dentro de: const promesas = [ ...
-
-
         function revelarPromesa() {
             const card = document.getElementById('card');
             if(!card.classList.contains('flipped')) {
+                if (navigator.vibrate) navigator.vibrate(50);
                 const random = promesas[Math.floor(Math.random() * promesas.length)];
                 document.getElementById('verse').innerText = `"${random.v}"`;
                 document.getElementById('reference').innerText = random.r;
-                card.style.transform = "rotateY(180deg)";
                 card.classList.add('flipped');
             }
         }
 
         function resetear() {
             const card = document.getElementById('card');
-            card.style.transform = "rotateY(0deg)";
             card.classList.remove('flipped');
-    
+            setTimeout(() => {
+                document.getElementById('verse').innerText = "";
+                document.getElementById('reference').innerText = "";
+            }, 400);
+        }
+
+        function compartirWhatsApp() {
+            const verso = document.getElementById('verse').innerText;
+            const referencia = document.getElementById('reference').innerText;
+            const mensaje = `✨ *Promesa del Día* ✨%0A%0A${verso}%0A👉 _${referencia}_`;
+            window.open(`https://api.whatsapp.com/send?text=${mensaje}`, '_blank');
         }
     </script>
 </body>
-</html>
